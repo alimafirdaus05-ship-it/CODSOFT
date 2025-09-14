@@ -1,0 +1,83 @@
+# hospital_chatbot_chloe.py
+
+# Global dictionary for storing patient data
+patient_data = {}
+
+def register_patient():
+    print("Chloe: Let's get you registered as a new patient.")
+    patient_data["name"] = input("Chloe: Please enter your full name: ")
+    patient_data["dob"] = input("Chloe: Please enter your date of birth (DD-MM-YYYY): ")
+    patient_data["contact"] = input("Chloe: Please enter your contact number: ")
+    patient_data["address"] = input("Chloe: Please enter your address: ")
+    print("\nChloe: Thank you! Your details have been recorded.")
+    print("Chloe: Here is what I saved:", patient_data)
+
+def hospital_chatbot(user_input):
+    user_input = user_input.lower()
+
+    # Greetings
+    if "hello" in user_input or "hi" in user_input or "hey" in user_input:
+        return "Hello! I’m Chloe, your hospital assistant. How can I help you today?"
+
+    # Appointments
+    elif "appointment" in user_input or "book" in user_input:
+        return "Sure. You can book an appointment if you are already a member of our hospital by calling our reception at 011-022-0333 or online via our hospital website. And if you are not a member, please let me know which department."
+    elif "reschedule" in user_input or "change" in user_input:
+        return "To reschedule your appointment, please call our reception at 011-022-0333 or use the online portal on our hospital website."
+    elif "cancel" in user_input or "delete" in user_input:
+        return "To cancel your appointment, please call our reception at 011-022-0333 or use the online portal on our hospital website."
+    
+    # Requirements for new patients
+    elif "new patient" in user_input or "not a member" in user_input:
+        register_patient()
+        return "Please bring a valid ID proof (like Aadhar or Passport), insurance details (if any), and previous medical records if available. You are now registered as a new patient."
+    
+    # Gratitude
+    elif "thank you" in user_input or "thanks" in user_input:
+        return "You’re welcome! Let's proceed further."
+    
+    # Doctors
+    elif "doctor" in user_input or "specialist" in user_input or "department" in user_input:
+        return "We have specialists in all departments specifically in Cardiology, Pediatrics, Orthopedics, Neurology, and Gynecology. Which department do you need?"
+
+    # Visiting hours
+    elif "visiting" in user_input or "hours" in user_input:
+        return "Visiting hours are from 10 AM to 12 PM and 5 PM to 7 PM daily. ICU visits are limited to 15 minutes."
+
+    # Emergency
+    elif "emergency" in user_input:
+        return "In case of emergency, please dial our 24/7 helpline: 999-888-7777. The Emergency Ward is always open."
+    
+    # Billing and Insurance
+    elif "fees" in user_input or "charges" in user_input:
+        return "The registration fee for new patients is ₹500. Consultation fees vary by department; please check our website for detailed information."
+    elif "insurance" in user_input or "coverage" in user_input:
+        return "We accept most major insurance providers. Please provide your insurance details during registration, and our staff will assist you with the coverage information."
+    elif "payment" in user_input or "pay" in user_input:
+        return "We accept payments via cash, credit/debit cards, and digital wallets. Payment can be made at the reception or through our online portal."
+    
+    # Location
+    elif "location" in user_input or "where" in user_input or "address" in user_input:
+        return "The hospital is at 321 Main Street, near Cubbon Park. You can reach us by metro (Cubbon Park) or bus route 42."
+
+    # Asking name
+    elif "your name" in user_input or "who are you" in user_input:
+        return "My name is Chloe, and I’m here to help you with hospital-related queries."
+
+    # Farewell
+    elif "bye" in user_input or "goodbye" in user_input:
+        return "Goodbye! Chloe wishes you good health and a speedy recovery."
+
+    # Default fallback
+    else:
+        return "Oops! I didn’t understand that. Could you please rephrase your question?"
+
+# Run chatbot loop
+if __name__ == "__main__":
+    print("Chloe: Hello! I’m Chloe, your hospital assistant (Type 'bye' to exit.)")
+    while True:
+        user = input("You: ")
+        response = hospital_chatbot(user)
+        print("Chloe:", response)
+        if "bye" in user.lower():
+            break
