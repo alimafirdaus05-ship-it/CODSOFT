@@ -1,0 +1,50 @@
+
+from math import inf
+
+def print_board(b):
+    print("\n" + "\n---+---+---\n".join(" | ".join(b[i:i+3]) for i in range(0,9,3)) + "\n")
+
+def winner(b):
+    for a, c, d in [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]:
+        if b[a]==b[c]==b[d]!=" ": return b[a]
+    return "Tie" if " " not in b else None
+
+def minimax(b, depth, is_max, ai, human, a, bt):
+    w = winner(b)
+    if w==ai: return 10-depth
+    if w==human: return depth-10
+    if w=="Tie": return 0
+    best = -inf if is_max else inf
+    for m in [i for i,v in enumerate(b) if v==" "]:
+        b[m] = ai if is_max else human
+        val = minimax(b, depth+1, not is_max, ai, human, a, bt)
+        b[m] = " "
+        if is_max:
+            best, a = max(best,val), max(a,val)
+        else:
+            best, bt = min(best,val), min(bt,val)
+        if bt <= a: break
+    return best
+
+def ai_move(b, ai, human):
+    return max((minimax(b,0,False,ai,human,-inf,inf),m) for m in [i for i,v in enumerate(b) if v==" "])[1]
+
+def main():
+    b = [" "]*9
+    human = input("Choose X or O (X goes first): ").upper()
+    ai = "O" if human=="X" else "X"
+    turn = "human" if human=="X" else "ai"
+    print_board(b)
+
+    while not winner(b):
+        if turn=="human":
+            m=int(input("Your move (1-9): "))-1
+            if b[m]==" ": b[m],turn=human,"ai"
+        else:
+            b[ai_move(b,ai,human)],turn=ai,"human"
+        print_board(b)
+
+    print("Result:", winner(b))
+
+if __name__=="__main__":
+    main()
