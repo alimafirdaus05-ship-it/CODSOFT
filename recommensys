@@ -1,0 +1,56 @@
+# travel_recommendation.py
+
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# 🌍 Sample dataset of destinations
+travel_data = {
+    'destination': [
+        'Goa',
+        'Paris',
+        'Manali',
+        'Maldives',
+        'New York',
+        'Tokyo',
+        'Swiss Alps',
+        'Dubai'
+    ],
+    'features': [
+        'beach nightlife water sports',
+        'romantic art culture food',
+        'mountains trekking adventure snow',
+        'beach luxury resort honeymoon',
+        'city nightlife shopping culture',
+        'technology culture anime food',
+        'mountains skiing snow adventure',
+        'desert shopping luxury adventure'
+    ]
+}
+
+# Convert to DataFrame
+df = pd.DataFrame(travel_data)
+
+# Convert features into TF-IDF vectors
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(df['features'])
+
+# Cosine similarity
+cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+# Recommendation function
+def recommend_place(place_name):
+    if place_name not in df['destination'].values:
+        return ["Destination not found in database."]
+    
+    idx = df[df['destination'] == place_name].index[0]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:4]
+    recommendations = df['destination'].iloc[[i[0] for i in sim_scores]].tolist()
+    return recommendations
+
+# Run the recommendation system
+if __name__ == "__main__":
+    print("🌍 Travel Recommendation System 🌍")
+    place = input("Enter a destination you like: ")
+    print("You might also enjoy visiting:", recommend_place(place))
